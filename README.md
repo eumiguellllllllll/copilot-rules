@@ -14,15 +14,11 @@ GitHub Copilot is powerful but can hallucinate non-existent APIs, lose context i
 
 ## What's Included
 
-**`.vscode/settings.json`** - 100+ instructions organized by category:
+**`instructions/global.instructions.md`** - Copilot instruction file (Markdown + frontmatter) ready to copy into user or workspace profiles.
 
-- **Anti-Hallucination** - Prevent inventing non-existent code
-- **Context Management** - Maintain accuracy across long sessions
-- **Code Quality** - Consistency, dead code detection, error patterns
-- **Workflow** - Analyze before coding, provide action plans
-- **Architecture** - DRY principle, maintainable patterns
-- **Performance & Security** - Production-ready code standards
-- **Language Support** - TypeScript, JavaScript, Python, C#/.NET
+**`.vscode/settings.json`** - Configures VS Code to consume instruction files and applies default Copilot/editor safeguards.
+
+**`scripts/install-copilot-instructions.bat`** & **`scripts/install-copilot-instructions.sh`** - Automation scripts that install the instruction file into the global VS Code profile on Windows, macOS, and Linux.
 
 ## Installation
 
@@ -41,6 +37,32 @@ cp settings.json /path/to/your/project/.vscode/settings.json
 2. Click "Open Settings (JSON)" icon (top right)
 3. Merge content from `.vscode/settings.json` with your existing settings
 
+### Option 3: Global Copilot Instructions (User Profile)
+
+Run the helper script that matches your platform to copy `instructions/global.instructions.md` into the VS Code profile `prompts` folder. Supply an alternate URL or output filename if you need a different branch or custom naming.
+
+```powershell
+# Windows (PowerShell or Command Prompt)
+scripts\install-copilot-instructions.bat
+
+# Override the download URL or output file name (optional)
+scripts\install-copilot-instructions.bat "https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md" my-team.instructions.md
+```
+
+```bash
+# macOS / Linux
+bash scripts/install-copilot-instructions.sh
+
+# Override the download URL or output file name (optional)
+bash scripts/install-copilot-instructions.sh "https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md" my-team.instructions.md
+```
+
+The scripts detect the correct profile directory automatically:
+
+- Windows: `%APPDATA%\Code\User\prompts` (or `Code - Insiders`)
+- macOS: `~/Library/Application Support/Code/User/prompts`
+- Linux: `${XDG_CONFIG_HOME:-$HOME/.config}/Code/User/prompts`
+
 ### Usage
 
 Reload VSCode: `Ctrl+Shift+P` → `Developer: Reload Window`
@@ -52,7 +74,7 @@ Copilot will now follow all instructions automatically.
 Found a Copilot error pattern or instruction that improves code quality? Share it.
 
 1. Fork this repository
-2. Edit `.vscode/settings.json` - add or improve instructions
+2. Edit `instructions/global.instructions.md` (and `.vscode/settings.json` if tooling defaults need changes)
 3. Test your changes
 4. Submit a Pull Request
 

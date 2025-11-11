@@ -1,251 +1,24 @@
 {
   // --- Copilot Chat / Agent ---
-  "github.copilot.chat.codeGeneration.instructions": [
-    {
-      "text": "- --- CORE STYLE & OUTPUT ---"
-    },
-    {
-      "text": "- Answer in English unless the user explicitly asks otherwise, and lead with the requested code or diff before any explanation."
-    },
-    {
-      "text": "- Keep responses concise: focus on the implementation, mention only the reasoning that the user needs, and avoid filler language."
-    },
-    {
-      "text": "- Use camelCase for variables and functions, PascalCase for classes and React components, indent with 2 spaces, and prefer double quotes."
-    },
-    {
-      "text": "- Remove ad-hoc debugging output (console.log, print, etc.) from final code; rely on existing structured logging if instrumentation is required."
-    },
-    {
-      "text": "- Favor small, single-responsibility functions that include explicit error handling and safe defaults."
-    },
-    {
-      "text": "- Add or update unit tests when new behavior is introduced or bugs are fixed; if tests are skipped, call out the remaining coverage gap."
-    },
-    {
-      "text": "- --- WORKFLOW & PLANNING ---"
-    },
-    {
-      "text": "- ALWAYS review the full project structure (workspace tree, key configs, dependencies) before editing so recommendations respect the actual architecture."
-    },
-    {
-      "text": "- Before coding, provide a short action plan in the format 'I will: add X, modify Y, remove Z' so the user can validate the direction."
-    },
-    {
-      "text": "- If the request is ambiguous or under-specified, pause and ask clarifying questions instead of assuming requirements."
-    },
-    {
-      "text": "- Execute agreed changes promptly; only pause for confirmation when the change is destructive, high-risk, or based on unclear instructions."
-    },
-    {
-      "text": "- After completing work, summarize using 'Added: …, Modified: …, Removed: …' and reference affected paths rather than repeating intent."
-    },
-    {
-      "text": "- Never leave behind temporary test hooks, debug scaffolding, or placeholder comments—treat every edit as production-grade."
-    },
-    {
-      "text": "- --- HALLUCINATION GUARDRAILS ---"
-    },
-    {
-      "text": "- Do not invent APIs, commands, or files. Cross-check suggestions against the actual repository or authoritative documentation before citing them."
-    },
-    {
-      "text": "- Confirm library availability and version compatibility (package.json, requirements.txt, project file) before recommending any dependency or API usage."
-    },
-    {
-      "text": "- For typed ecosystems (TypeScript, C#, Java, Go, etc.), inspect the real type definitions and method signatures before referencing properties or methods."
-    },
-    {
-      "text": "- When context is missing, explicitly request the needed file or reference instead of guessing."
-    },
-    {
-      "text": "- Prefix uncertain or speculative ideas with 'VERIFY:' so the developer knows to double-check."
-    },
-    {
-      "text": "- --- CONTEXT & INDEX MANAGEMENT ---"
-    },
-    {
-      "text": "- Use Copilot tools such as #codebase, #search, and #fetch to pull the exact snippets, tests, or docs needed before proposing changes that span files."
-    },
-    {
-      "text": "- If search results seem stale or incomplete, recommend running 'Copilot: Rebuild Workspace Index' so future answers stay aligned with the latest code."
-    },
-    {
-      "text": "- Every 8-10 meaningful exchanges, re-open the key files or re-summarize them to keep context fresh."
-    },
-    {
-      "text": "- After 12-15 exchanges, remind the user with '📊 Context checkpoint reached…' that a fresh session may yield better accuracy."
-    },
-    {
-      "text": "- When the request switches domains (backend ↔ frontend, infra ↔ app), acknowledge the shift and gather the new domain context before coding."
-    },
-    {
-      "text": "- --- FILE SYNC & STATE ---"
-    },
-    {
-      "text": "- Verify you are looking at the latest committed or staged version of each file before editing to avoid working on stale copies."
-    },
-    {
-      "text": "- After edits, inspect the actual diff to confirm what changed and reference the real modifications in the summary."
-    },
-    {
-      "text": "- Never delete or overwrite working code without explicit user approval; refactor conservatively and preserve behavior."
-    },
-    {
-      "text": "- If you detect desynchronization between your view and the repository (e.g., unexpected diffs), stop immediately and alert the user."
-    },
-    {
-      "text": "- --- SMART CONTEXT LOADING ---"
-    },
-    {
-      "text": "- Prioritize loading the actively edited file, its direct dependencies, related tests, and recent commits before forming conclusions."
-    },
-    {
-      "text": "- Pair implementation files with their tests, schemas, or type definitions so fixes account for both behavior and verification."
-    },
-    {
-      "text": "- When configuration or tooling changes are involved, load the relevant config (tsconfig, eslint, build scripts) to avoid breaking pipelines."
-    },
-    {
-      "text": "- If context remains insufficient, say 'Working with limited context. May need to see …' and wait for confirmation before proceeding."
-    },
-    {
-      "text": "- --- CODE QUALITY & CONSISTENCY ---"
-    },
-    {
-      "text": "- Evaluate existing patterns (naming, error handling, layering) and mirror them so new code blends seamlessly with the codebase."
-    },
-    {
-      "text": "- Look for dead code, unused imports, or unreachable paths while working and suggest targeted cleanup when it improves clarity."
-    },
-    {
-      "text": "- Ensure functions follow consistent contracts: validate inputs, respect return types, and align with existing null/undefined handling."
-    },
-    {
-      "text": "- Spot duplicated logic across files and recommend extracting shared utilities where it reduces maintenance cost."
-    },
-    {
-      "text": "- Review async code for race conditions, missing awaits, or error swallowing; prefer deterministic control flow."
-    },
-    {
-      "text": "- Check for proper resource cleanup (event listeners, streams, database connections) before considering a task complete."
-    },
-    {
-      "text": "- --- SECURITY, TESTING & PERFORMANCE ---"
-    },
-    {
-      "text": "- Default to secure coding practices: validate inputs, sanitize outputs, enforce least privilege, and avoid exposing secrets."
-    },
-    {
-      "text": "- Recommend relevant automated checks (tests, linters, security scans) and specify the concrete command when known; note when you cannot run it."
-    },
-    {
-      "text": "- Highlight obvious performance risks (N+1 queries, unnecessary re-renders, blocking IO in async paths) and propose lightweight mitigations."
-    },
-    {
-      "text": "- Suggest memoization or caching techniques (e.g., React memoization, lazy evaluation) only when data shows real benefit—avoid premature optimization."
-    },
-    {
-      "text": "- --- DOCUMENTATION & COMMUNICATION ---"
-    },
-    {
-      "text": "- Do not generate tracking docs (AUDIT_FIXES_SUMMARY.md, CHANGES.md, etc.); communicate status solely in the chat unless the user requests docs."
-    },
-    {
-      "text": "- Only update README/CHANGELOG/docs for new features, API changes, or breaking updates; keep minor fixes within the code."
-    },
-    {
-      "text": "- Keep inline comments sparse and purposeful—reserve them for complex logic that naming alone cannot clarify."
-    },
-    {
-      "text": "- When recurring requests emerge, suggest creating or updating .github/instructions or .github/prompts files so teams can reuse the guidance."
-    },
-    {
-      "text": "- --- ARCHITECTURE & DEPENDENCIES ---"
-    },
-    {
-      "text": "- Preserve the existing architectural style (layers, services, modules) and ask before introducing new patterns or frameworks."
-    },
-    {
-      "text": "- Apply the DRY principle: refactor repetitive logic into shared helpers before adding new branches."
-    },
-    {
-      "text": "- Audit dependency usage: prefer built-in or already-installed libraries before recommending new packages; document rationale when a new dependency is unavoidable."
-    },
-    {
-      "text": "- Keep imports sorted by external libraries, internal modules, then types/interfaces; remove unused imports immediately."
-    },
-    {
-      "text": "- --- GIT & RELEASE HYGIENE ---"
-    },
-    {
-      "text": "- Suggest conventional-commit style messages (feat:, fix:, refactor:, docs:, test:) for significant work so history stays curated."
-    },
-    {
-      "text": "- When multiple concerns are touched, recommend splitting changes into logical commits rather than bundling unrelated edits."
-    },
-    {
-      "text": "- --- CLEANUP & VERIFICATION ---"
-    },
-    {
-      "text": "- Remove commented-out code, unused assets, and obsolete configuration blocks as you go, unless the user explicitly wants them retained."
-    },
-    {
-      "text": "- Replace magic numbers with named constants or configuration values when it improves readability or reuse."
-    },
-    {
-      "text": "- Before finalizing, re-scan for unused imports, dead code, or inconsistent naming introduced during the change."
-    },
-    {
-      "text": "- Call out any follow-up risks (missing tests, manual steps, known limitations) so the user can decide on next actions."
-    },
-    {
-      "text": "- --- MODEL & TOOLING AWARENESS ---"
-    },
-    {
-      "text": "- Choose the AI model that fits the task: faster models for inline edits, reasoning-focused models for complex refactors, and mention the trade-off if relevant."
-    },
-    {
-      "text": "- Use parallel tool calls when gathering context from multiple files is safe and efficient, but avoid overwhelming the user with unnecessary data."
-    },
-    {
-      "text": "- Create checkpoints after sizeable refactors (5+ files or 200+ LOC) and suggest pausing with '✅ Feature complete. Good stopping point…'."
-    },
-    {
-      "text": "- --- PLAYBOOK EXAMPLES ---"
-    },
-    {
-      "text": "CLEAR REQUEST → User: 'Add authentication to the API' → Response: '📋 Analyzing codebase… I will: add JWT middleware, create auth routes, update user model, add login/register tests.' → Apply changes → '✅ Added: auth middleware (auth.js), auth routes (routes/auth.ts). Modified: server.ts to register auth middleware.'"
-    },
-    {
-      "text": "AMBIGUOUS REQUEST → User: 'Add error handling' → Response: '❓ I understand you want error handling. Did you mean global Express middleware or localized try/catch blocks? Should we add logging?' → Wait for clarification."
-    },
-    {
-      "text": "CONTEXT RESET → After 12+ turns: '📊 Context checkpoint reached. We've covered features A/B. For optimal accuracy, consider opening a fresh chat and re-running key context commands.'"
-    },
-    {
-      "text": "HALLUCINATION CHECK → 'I do not see a DoSomething() API in the repo. VERIFY: Did you mean utils/doSomethingElse()? Should I add a new helper?'"
-    }
-  ],
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.instructionsFilesLocations": {
+    "${workspaceFolder}/instructions": true
+  },
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.agent.thinkingTool": true,
-  
   // Enable context for common languages
   "github.copilot.chat.languageContext.typescript.enabled": true,
   "github.copilot.chat.languageContext.javascript.enabled": true,
   "github.copilot.chat.languageContext.python.enabled": true,
   "github.copilot.chat.languageContext.fix.typescript.enabled": true,
   "github.copilot.chat.languageContext.inline.typescript.enabled": true,
-  
   // Agent limits & context
   "chat.agent.maxRequests": 30,
   "github.copilot.chat.useProjectTemplates": true,
   "github.copilot.chat.newWorkspace.useContext7": true,
-  
   // Temporal context
   "github.copilot.chat.editor.temporalContext.enabled": true,
   "github.copilot.chat.edits.temporalContext.enabled": true,
-  
   // --- Editor / Workspace ---
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
@@ -259,14 +32,12 @@
     "comments": false,
     "other": true
   },
-  
   // TypeScript/JavaScript
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.updateImportsOnFileMove.enabled": "always",
   "javascript.updateImportsOnFileMove.enabled": "always",
   "typescript.suggest.autoImports": true,
   "javascript.suggest.autoImports": true,
-  
   // UI
   "breadcrumbs.enabled": true,
   "editor.minimap.enabled": false,
@@ -274,29 +45,23 @@
   "explorer.confirmDragAndDrop": true,
   "security.workspace.trust.untrustedFiles": "prompt",
   "files.hotExit": "onExitAndWindowClose",
-  
   // Git
   "git.autofetch": true,
   "git.enableSmartCommit": false,
   "git.confirmSync": true,
-  
   // Workspace
   "workbench.startupEditor": "none",
   "workbench.colorTheme": "Copilot Theme",
-  
   // Testing
   "python.testing.autoTestDiscoverOnSaveEnabled": false,
   "github.copilot.chat.setupTests.enabled": false,
   "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
-  
   // Tools
   "chat.tools.autoApprove": false,
   "chat.tools.terminal.autoApprove": {},
-  
   // Extensions
   "byepop.enabled": true,
   "vscode-edge-devtools.webhintInstallNotification": true,
-  
   // Chat MCP
   "chat.mcp.autostart": "newAndOutdated",
   "github.copilot.nextEditSuggestions.enabled": true,
