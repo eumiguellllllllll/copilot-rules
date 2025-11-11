@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEFAULT_URL="https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md"
+DEFAULT_URL="https://raw.githubusercontent.com/LightZirconite/copilot-rules/refs/heads/main/instructions/global.instructions.md"
 
 if [ -n "${1:-}" ]; then
   SOURCE="$1"

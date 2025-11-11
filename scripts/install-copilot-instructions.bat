@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 set "PAUSE_ON_ERROR=0"
 call :detectPauseMode
 
-set "DEFAULT_URL=https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md"
+set "DEFAULT_URL=https://raw.githubusercontent.com/LightZirconite/copilot-rules/refs/heads/main/instructions/global.instructions.md"
 
 if "%~1"=="" (
   set "SOURCE=%DEFAULT_URL%"
