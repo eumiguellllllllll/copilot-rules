@@ -94,15 +94,21 @@ echo Closing VS Code...
 taskkill /F /IM Code.exe >nul 2>&1
 timeout /t 2 /nobreak >nul
 echo Starting VS Code...
-start "" "%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe"
+start "" /B "%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe" >nul 2>&1
+if not exist "%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe" (
+  where code >nul 2>&1
+  if not errorlevel 1 (
+    start "" /B code >nul 2>&1
+  )
+)
 echo VS Code restarted successfully!
-goto :endRestart
+echo.
+pause
+exit /b 0
 
 :skipRestart
 echo.
 echo Please reload VS Code manually: Ctrl+Shift+P -^> Developer: Reload Window
-
-:endRestart
 echo.
 pause
 exit /b 0

@@ -150,7 +150,8 @@ install_instructions() {
     sleep 2
     echo "Starting VS Code..."
     if command -v code >/dev/null 2>&1; then
-      code &
+      nohup code >/dev/null 2>&1 &
+      disown
       echo "VS Code restarted successfully!"
     else
       echo "Unable to restart VS Code automatically. Please start it manually."
