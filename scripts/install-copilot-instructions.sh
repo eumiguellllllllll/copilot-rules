@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DEFAULT_URL="https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md"
+DEFAULT_URL="https://raw.githubusercontent.com/LightZirconite/copilot-rules/refs/heads/main/instructions/global.instructions.md"
 
 if [ -n "${1:-}" ]; then
   SOURCE="$1"
@@ -26,7 +26,7 @@ resolve_target_dir() {
       candidates+=("$config_home/Code - Insiders/User/prompts")
       ;;
     MINGW*|MSYS*|CYGWIN*)
-      echo "Utilisez install-copilot-instructions.bat sur Windows." >&2
+      echo "Use install-copilot-instructions.bat on Windows." >&2
       exit 1
       ;;
     *)
@@ -47,47 +47,121 @@ resolve_target_dir() {
   fi
 }
 
+download_file() {
+  local url="$1"
+  local dest="$2"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$url" -o "$dest" || {
+      if command -v wget >/dev/null 2>&1; then
+        wget -qO "$dest" "$url" || return 1
+      else
+        return 1
+      fi
+    }
+  elif command -v wget >/dev/null 2>&1; then
+    wget -qO "$dest" "$url" || return 1
+  else
+    echo "Neither curl nor wget are available." >&2
+    return 1
+  fi
+  return 0
+}
+
 install_instructions() {
   mkdir -p "$TARGET_DIR" || {
-    echo "Echec de la creation du repertoire $TARGET_DIR" >&2
+    echo "Failed to create directory $TARGET_DIR" >&2
     exit 1
   }
   
   local dest="$TARGET_DIR/$TARGET_NAME"
 
   if [ -f "$dest" ]; then
-    echo "[1/3] Suppression de l'ancienne version..."
+    echo "[1/4] Removing previous version..."
     rm -f "$dest"
   fi
 
-  echo "[2/3] Telechargement depuis GitHub..."
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL "$SOURCE" -o "$dest" || {
-      echo "curl a echoue. Tentative avec wget..." >&2
-      if command -v wget >/dev/null 2>&1; then
-        wget -qO "$dest" "$SOURCE" || {
-          echo "wget a egalement echoue." >&2
-          exit 1
-        }
-      else
-        exit 1
-      fi
-    }
-  elif command -v wget >/dev/null 2>&1; then
-    wget -qO "$dest" "$SOURCE" || {
-      echo "wget a echoue." >&2
-      exit 1
-    }
-  else
-    echo "Ni curl ni wget ne sont disponibles." >&2
+  echo "[2/4] Downloading from GitHub..."
+  download_file "$SOURCE" "$dest" || {
+    echo "Download failed." >&2
     exit 1
-  fi
+  }
 
-  echo "[3/3] Installation terminee: $dest"
+  echo "[3/4] Installation complete: $dest"
   echo ""
   echo "========================================="
-  echo "  SUCCES: Instructions Copilot installees"
+  echo "  SUCCESS: Copilot instructions installed"
   echo "========================================="
+  echo ""
+
+  # VS Code configuration
+  local vscode_settings=""
+  if [ "$(uname -s)" = "Darwin" ]; then
+    vscode_settings="$HOME/Library/Application Support/Code/User/settings.json"
+  else
+    local config_home="${XDG_CONFIG_HOME:-$HOME/.config}"
+    vscode_settings="$config_home/Code/User/settings.json"
+  fi
+
+  echo "[4/4] VS Code configuration..."
+  echo ""
+  echo "For Copilot to use these instructions, your settings.json must contain:"
+  echo '  "github.copilot.chat.codeGeneration.useInstructionFiles": true'
+  echo ""
+  read -p "Do you want to update your VS Code configuration automatically? (y/n): " -n 1 -r
+  echo ""
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Downloading recommended configuration..."
+    local settings_url="https://raw.githubusercontent.com/LightZirconite/copilot-rules/refs/heads/main/.vscode/settings.json"
+    local temp_settings="/tmp/copilot-rules-settings.json"
+    
+    download_file "$settings_url" "$temp_settings" || {
+      echo "WARNING: Unable to download configuration." >&2
+      echo "Manually add this line to $vscode_settings:"
+      echo '  "github.copilot.chat.codeGeneration.useInstructionFiles": true'
+      return 0
+    }
+
+    mkdir -p "$(dirname "$vscode_settings")"
+    cp "$temp_settings" "$vscode_settings"
+    rm -f "$temp_settings"
+    echo "VS Code configuration updated successfully!"
+  else
+    echo ""
+    echo "Manual configuration required:"
+    echo "1. Open VS Code Settings (Ctrl+, or Cmd+,)"
+    echo "2. Click 'Open Settings (JSON)' (icon in top right)"
+    echo "3. Add this line:"
+    echo '   "github.copilot.chat.codeGeneration.useInstructionFiles": true'
+    echo ""
+  fi
+
+  echo ""
+  echo "========================================="
+  echo ""
+  read -p "Do you want to restart VS Code now? (y/n): " -n 1 -r
+  echo ""
+
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "Closing VS Code..."
+    pkill -x Code 2>/dev/null || pkill -x code 2>/dev/null
+    sleep 2
+    echo "Starting VS Code..."
+    if command -v code >/dev/null 2>&1; then
+      nohup code >/dev/null 2>&1 &
+      disown
+      echo "VS Code restarted successfully!"
+    else
+      echo "Unable to restart VS Code automatically. Please start it manually."
+    fi
+  else
+    echo ""
+    echo "Please reload VS Code manually: Ctrl+Shift+P -> Developer: Reload Window"
+  fi
+
+  echo ""
 }
 
 resolve_target_dir
