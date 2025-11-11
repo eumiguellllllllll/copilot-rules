@@ -92,8 +92,12 @@ exit /b 1
 :detectPauseMode
 set "CMD_LINE=%CMDCMDLINE%"
 if not defined CMD_LINE exit /b 0
-set "WITH_C=%CMD_LINE:/c=%"
-if not "%WITH_C%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=1"
-set "WITH_K=%CMD_LINE:/k=%"
-if not "%WITH_K%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=0"
+set "WITH_C_LOW=%CMD_LINE:/c=%"
+if not "%WITH_C_LOW%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=1"
+set "WITH_C_UP=%CMD_LINE:/C=%"
+if not "%WITH_C_UP%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=1"
+set "WITH_K_LOW=%CMD_LINE:/k=%"
+if not "%WITH_K_LOW%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=0"
+set "WITH_K_UP=%CMD_LINE:/K=%"
+if not "%WITH_K_UP%"=="%CMD_LINE%" set "PAUSE_ON_ERROR=0"
 exit /b 0
