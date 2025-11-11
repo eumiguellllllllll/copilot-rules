@@ -270,15 +270,15 @@
   // UI
   "breadcrumbs.enabled": true,
   "editor.minimap.enabled": false,
-  "explorer.confirmDelete": false,
-  "explorer.confirmDragAndDrop": false,
-  "security.workspace.trust.untrustedFiles": "open",
-  "files.hotExit": "off",
+  "explorer.confirmDelete": true,
+  "explorer.confirmDragAndDrop": true,
+  "security.workspace.trust.untrustedFiles": "prompt",
+  "files.hotExit": "onExitAndWindowClose",
   
   // Git
   "git.autofetch": true,
-  "git.enableSmartCommit": true,
-  "git.confirmSync": false,
+  "git.enableSmartCommit": false,
+  "git.confirmSync": true,
   
   // Workspace
   "workbench.startupEditor": "none",
@@ -290,13 +290,8 @@
   "github.copilot.chat.edits.suggestRelatedFilesForTests": false,
   
   // Tools
-  "chat.tools.autoApprove": true,
-  "chat.tools.terminal.autoApprove": {
-    "npm run build": true,
-    "npm test": true,
-    "pytest": true,
-    "node": true
-  },
+  "chat.tools.autoApprove": false,
+  "chat.tools.terminal.autoApprove": {},
   
   // Extensions
   "byepop.enabled": true,
