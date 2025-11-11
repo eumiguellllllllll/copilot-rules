@@ -5,8 +5,15 @@ set "PAUSE_ON_ERROR=0"
 call :detectPauseMode
 
 set "DEFAULT_URL=https://raw.githubusercontent.com/LightZirconite/copilot-rules/main/instructions/global.instructions.md"
+for %%I in ("%~dp0..") do set "REPO_ROOT=%%~fI"
+set "DEFAULT_FILE=%REPO_ROOT%\instructions\global.instructions.md"
+
 if "%~1"=="" (
-  set "SOURCE=%DEFAULT_URL%"
+  if exist "%DEFAULT_FILE%" (
+    set "SOURCE=%DEFAULT_FILE%"
+  ) else (
+    set "SOURCE=%DEFAULT_URL%"
+  )
 ) else (
   set "SOURCE=%~1"
 )
