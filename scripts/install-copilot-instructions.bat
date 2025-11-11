@@ -33,29 +33,24 @@ if not exist "%TARGET_DIR%" (
 
 set "DEST_FILE=%TARGET_DIR%\%TARGET_NAME%"
 
-if exist "%DEST_FILE%" (
-  echo Updating existing instructions at "%DEST_FILE%"...
-  del /F /Q "%DEST_FILE%" >nul 2>&1
-) else (
-  echo Installing instructions to "%DEST_FILE%"...
-)
-
-set "SOURCE_KIND=remote"
-
 if exist "%SOURCE%" (
-  set "SOURCE_KIND=local"
-  echo Copying instructions from "%SOURCE%"...
+  echo [1/2] Source locale detectee: %SOURCE%
   copy /Y "%SOURCE%" "%DEST_FILE%" >nul
-  if errorlevel 1 call :fail "Failed to copy instructions from %SOURCE%."
+  if errorlevel 1 call :fail "Impossible de copier le fichier local."
+  echo [2/2] Fichier installe avec succes: %DEST_FILE%
 ) else (
+  echo [1/2] Telechargement depuis: %SOURCE%
   call :download "%SOURCE%" "%DEST_FILE%"
-  if errorlevel 1 call :fail "Failed to download instructions from %SOURCE%."
+  if errorlevel 1 call :fail "Echec du telechargement."
+  echo [2/2] Fichier telecharge et installe: %DEST_FILE%
 )
 
 echo.
-echo SUCCESS: Copilot instructions installed to "%DEST_FILE%" (source: %SOURCE_KIND%).
+echo =========================================
+echo   SUCCES: Instructions Copilot installees
+echo =========================================
 echo.
-if "%PAUSE_ON_ERROR%"=="1" pause
+pause
 exit /b 0
 
 :detectTarget
