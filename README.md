@@ -24,11 +24,18 @@ GitHub Copilot is powerful but can hallucinate non-existent APIs, lose context i
 
 ### Option 1: Workspace Settings (Recommended)
 
-Copy `.vscode/settings.json` to your project's `.vscode` folder:
+Copy the settings file **and** the instruction file into your project:
 
 ```bash
-mkdir -p .vscode
-cp settings.json /path/to/your/project/.vscode/settings.json
+mkdir -p .vscode instructions
+cp .vscode/settings.json /path/to/your/project/.vscode/settings.json
+cp instructions/global.instructions.md /path/to/your/project/instructions/global.instructions.md
+```
+
+```powershell
+# Windows PowerShell / CMD
+echo F|xcopy .vscode\settings.json C:\path\to\project\.vscode\ /Y
+echo F|xcopy instructions\global.instructions.md C:\path\to\project\instructions\ /Y /I
 ```
 
 ### Option 2: Global User Settings
